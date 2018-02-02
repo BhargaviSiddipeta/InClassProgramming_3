@@ -1,0 +1,70 @@
+<!doctype html>
+<html ng-app="weather" ng-controller="weathercontroller">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        angular.module('weather', [])
+            .controller('weathercontroller', function($scope, $http) {
+                $scope.getWeather = function() {
+                    $http.get('https://api.edamam.com/api/nutrition-data?app_id=b14eeae1&app_key=dd733c0307965a1f70d18f6e4286026f&ingr=1%20large%20potato/'+$scope.State+'.json').success(function(data)
+                    {
+                        var url = "http://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?username=eba0cf43-7845-4090-b49b-59f36b3dd21c&password=EPx3NSOMyNGw&text="+$scope.State;
+                        $("#textspeech").attr('onclick',"location.href="+"'"+url+"'");
+                        $("#textspeech").show();
+                        console.log(data);
+                        $scope.weather = "Total Calorie is : " + data.calories ;
+                        $scope.pressure = "Total weight is : " + data.totalWeight;
+                      //  $scope.humidity = "Relative Humidity :" + data.current_observation.relative_humidity;
+                      //  $scope.wind = "Wind :" + data.current_observation.wind_mph + "mph";
+                     //   icon= data.current_observation.icon_url;
+                   //     $scope.currentIcon = {
+                    //        html: "<img source='" +icon + "'/>"
+                    //    }
+                       // document.getElementById("currentIcon").innerHTML = "<img src='" + icon + "'/>";
+                    })
+                }
+            });
+    </script>
+    <script>
+        .weatherModule {
+            background-color: blue;
+            height: 150px;
+            width: 250px;
+            border: 1px solid powderblue;
+            padding: 1em;
+            margin: 50px;
+        }
+    </script>
+    <style>
+        body{
+            background-image: url("food.jpg");
+            height: auto;
+            width: auto;
+            background-position: center;
+            background-position-x: center;
+            background-position-y: center;
+            background-repeat: no-repeat;
+            background-size:cover;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>Nutritional Details </h1>
+    <label>Enter Food Item :</label>
+    <input type="text" ng-model="State" >
+    <button id="btn" ng-click="getWeather()">Show Details</button>
+    <button id="textspeech" value="click">Hear it here!!</button>
+    <div class="weatherModule">
+        <p class="currentConditions" ng-bind="weather"></p>
+        <p class="currentPressure" ng-bind="pressure"></p>
+        <p class="currentHumidity" ng-bind="humidity"></p>
+        <p class="currentWind" ng-bind="wind"></p>
+        <div class="currentIcon" ng-bind-html-unsafe="currentIcon.html" id="currentIcon"></div>
+
+    </div>
+
+</div>
+</body>
+</html>
